@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tech Support — One Stop Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,600;0,800;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #04060f;
+    --surface: #080d1f;
+    --card: #0b1228;
+    --border: rgba(62, 110, 255, 0.18);
+    --border-hot: rgba(62, 110, 255, 0.55);
+    --accent: #3e6eff;
+    --accent2: #00d4ff;
+    --gold: #ffd166;
+    --red: #ff4f6a;
+    --green: #06d6a0;
+    --text: #c8d6f5;
+    --muted: #5a6a90;
+    --glow: rgba(62,110,255,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(62,110,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(62,110,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(62,110,255,0.09) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+    animation: pulseGlow 6s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulseGlow {
+    from { opacity: 0.7; transform: translateX(-50%) scale(1); }
+    to   { opacity: 1;   transform: translateX(-50%) scale(1.1); }
+  }
+
+  /* ── LAYOUT ── */
+  .page { position: relative; z-index: 1; max-width: 1160px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 64px 0 48px;
+    position: relative;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.22);
+    padding: 5px 16px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(42px, 7vw, 80px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: #fff;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    margin-top: 12px;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  /* ── STATS STRIP ── */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0 0;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    display: block;
+  }
+
+  .stat-val em { color: var(--accent2); font-style: normal; }
+
+  .stat-lbl {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-hot), transparent);
+    margin: 48px 0 40px;
+  }
+
+  /* ── SECTION TITLE ── */
+  .sec-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .sec-title::before {
+    content: '//';
+    color: var(--accent);
+    margin-right: 8px;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
+  }
+
+  /* ── CATEGORY CARD ── */
+  .cat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 24px;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    animation: fadeUp 0.5s ease both;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .cat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 10px 10px 0 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .cat-card:hover { border-color: var(--border-hot); transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(62,110,255,0.12); }
+  .cat-card:hover::before { opacity: 1; }
+
+  .cat-card.email::before  { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .cat-card.sms::before    { background: linear-gradient(90deg, #a259ff, #ff66c4); }
+  .cat-card.tech::before   { background: linear-gradient(90deg, var(--green), var(--accent2)); }
+  .cat-card.finance::before{ background: linear-gradient(90deg, var(--gold), #ff9a3c); }
+
+  .cat-icon {
+    width: 42px; height: 42px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .cat-card.email .cat-icon   { background: rgba(62,110,255,0.12); }
+  .cat-card.sms .cat-icon     { background: rgba(162,89,255,0.12); }
+  .cat-card.tech .cat-icon    { background: rgba(6,214,160,0.12); }
+  .cat-card.finance .cat-icon { background: rgba(255,209,102,0.12); }
+
+  .cat-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .cat-card.email .cat-name   { color: var(--accent2); }
+  .cat-card.sms .cat-name     { color: #b97dff; }
+  .cat-card.tech .cat-name    { color: var(--green); }
+  .cat-card.finance .cat-name { color: var(--gold); }
+
+  .service-list { list-style: none; margin-bottom: 22px; }
+
+  .service-list li {
+    font-size: 13.5px;
+    font-weight: 300;
+    color: var(--text);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+
+  .service-list li:last-child { border-bottom: none; }
+
+  .service-list li:hover { color: #fff; }
+
+  .service-list li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .cat-card.email .service-list li::before   { background: var(--accent); }
+  .cat-card.sms .service-list li::before     { background: #b97dff; }
+  .cat-card.tech .service-list li::before    { background: var(--green); }
+  .cat-card.finance .service-list li::before { background: var(--gold); }
+
+  .btn-order {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 6px;
+    border: none;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .btn-order:hover { opacity: 0.85; transform: scale(0.98); }
+
+  .cat-card.email .btn-order   { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
+  .cat-card.sms .btn-order     { background: linear-gradient(135deg, #a259ff, #ff66c4); color: #fff; }
+  .cat-card.tech .btn-order    { background: linear-gradient(135deg, var(--green), var(--accent2)); color: #000; }
+  .cat-card.finance .btn-order { background: linear-gradient(135deg, var(--gold), #ff9a3c); color: #000; }
+
+  /* ── HOW IT WORKS ── */
+  .steps {
+    display: flex;
+    gap: 0;
+    margin-top: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    flex-wrap: wrap;
+  }
+
+  .step {
+    flex: 1;
+    min-width: 200px;
+    padding: 28px 24px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+
+  .step:last-child { border-right: none; }
+
+  .step-num {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: rgba(62,110,255,0.12);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .step-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .step p { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.6; }
+
+  /* ── CTA ── */
+  .cta-box {
+    margin-top: 48px;
+    background: linear-gradient(135deg, rgba(62,110,255,0.08), rgba(0,212,255,0.04));
+    border: 1px solid rgba(62,110,255,0.28);
+    border-radius: 14px;
+    padding: 48px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 200px;
+    background: radial-gradient(ellipse, rgba(62,110,255,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-box h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .cta-box p {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .btn-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 36px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(37,211,102,0.3);
+  }
+
+  .btn-wa:hover { background: #20b358; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(37,211,102,0.4); }
+
+  .note {
+    margin-top: 16px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .note strong { color: var(--red); font-style: normal; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(6px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border-hot);
+    border-radius: 14px;
+    padding: 36px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    animation: modalIn 0.3s ease;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(62,110,255,0.1);
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.94) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: rgba(255,255,255,0.05);
+    border: none;
+    color: var(--muted);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+  .modal-tag {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .modal h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .field input, .field select, .field textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: #fff;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field select option { background: var(--surface); }
+
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .field textarea { resize: vertical; min-height: 80px; }
+
+  .btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 6px;
+    padding: 13px 0;
+    border-radius: 8px;
+    border: none;
+    background: #25D366;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.25);
+  }
+
+  .btn-submit:hover { background: #20b358; transform: scale(0.99); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 64px;
+    letter-spacing: 0.08em;
+  }
+
+  footer strong { color: var(--accent2); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .cat-card:nth-child(1) { animation-delay: 0.05s; }
+  .cat-card:nth-child(2) { animation-delay: 0.12s; }
+  .cat-card:nth-child(3) { animation-delay: 0.19s; }
+  .cat-card:nth-child(4) { animation-delay: 0.26s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .stats { gap: 24px; }
+    .cta-box { padding: 32px 20px; }
+    .modal { padding: 28px 20px; }
+    .step { border-right: none; border-bottom: 1px solid var(--border); }
+    .step:last-child { border-bottom: none; }
+  }
+
+  /* ── TICKER ── */
+  .ticker-wrap {
+    overflow: hidden;
+    background: rgba(62,110,255,0.06);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    margin-bottom: 48px;
+    white-space: nowrap;
+  }
+
+  .ticker {
+    display: inline-block;
+    animation: ticker 28s linear infinite;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .ticker span { color: var(--accent2); margin: 0 16px; }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── STATUS DOT ── */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: rgba(6,214,160,0.08);
+    border: 1px solid rgba(6,214,160,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: blink 1.4s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <span class="modal-tag">Place an Order</span>
+    <h3 id="modal-title">Request Service</h3>
+
+    <div class="field">
+      <label>Your Name</label>
+      <input type="text" id="field-name" placeholder="Enter your name" />
+    </div>
+    <div class="field">
+      <label>Service</label>
+      <select id="field-service">
+        <optgroup label="📧 Email Services">
+          <option>Email Calls (Mix Domain / Gmail)</option>
+          <option>Email Marketing Tools</option>
+          <option>Email Data Management</option>
+        </optgroup>
+        <optgroup label="💬 SMS Services">
+          <option>iOS SMS Calls</option>
+          <option>PayPal Push Notifications</option>
+          <option>SMS Data Services</option>
+        </optgroup>
+        <optgroup label="⚙️ Tech & Access">
+          <option>RDP Services</option>
+          <option>SMTP (API / Manual / App Password)</option>
+          <option>All IP SMTP Configuration</option>
+        </optgroup>
+        <optgroup label="💰 Financial Services">
+          <option>Gift Card Blocking</option>
+          <option>Wire / Zelle / PayPal</option>
+          <option>Cash / Gold Pickup</option>
+          <option>Wire Accounts / TFN</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="field">
+      <label>Details / Requirements</label>
+      <textarea id="field-details" placeholder="Describe what you need..."></textarea>
+    </div>
+
+    <button class="btn-submit" onclick="sendToWhatsApp()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Send via WhatsApp
+    </button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="status"><span class="dot"></span> Available Now</div>
+    <div class="badge">One Stop Solution</div>
+    <h1>Tech <span>Support</span></h1>
+    <p class="subtitle">Professional &amp; Reliable Digital Services</p>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-val"><em>4</em></span>
+        <span class="stat-lbl">Service Categories</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val"><em>12</em>+</span>
+        <span class="stat-lbl">Active Services</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val"><em>24</em>/7</span>
+        <span class="stat-lbl">Support</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">100<em>%</em></span>
+        <span class="stat-lbl">Prepaid Orders</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      Email Services &nbsp;<span>◆</span>&nbsp; SMS Services &nbsp;<span>◆</span>&nbsp; RDP Access &nbsp;<span>◆</span>&nbsp; SMTP Config &nbsp;<span>◆</span>&nbsp; Financial Tools &nbsp;<span>◆</span>&nbsp; Wire &amp; Zelle &nbsp;<span>◆</span>&nbsp; iOS SMS &nbsp;<span>◆</span>&nbsp; Gift Card Services &nbsp;<span>◆</span>&nbsp; Email Marketing &nbsp;<span>◆</span>&nbsp; PayPal Notifications &nbsp;<span>◆</span>&nbsp;
+      Email Services &nbsp;<span>◆</span>&nbsp; SMS Services &nbsp;<span>◆</span>&nbsp; RDP Access &nbsp;<span>◆</span>&nbsp; SMTP Config &nbsp;<span>◆</span>&nbsp; Financial Tools &nbsp;<span>◆</span>&nbsp; Wire &amp; Zelle &nbsp;<span>◆</span>&nbsp; iOS SMS &nbsp;<span>◆</span>&nbsp; Gift Card Services &nbsp;<span>◆</span>&nbsp; Email Marketing &nbsp;<span>◆</span>&nbsp; PayPal Notifications &nbsp;<span>◆</span>&nbsp;
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <p class="sec-title">Services</p>
+  <div class="grid">
+
+    <!-- EMAIL -->
+    <div class="cat-card email">
+      <div class="cat-icon">📧</div>
+      <div class="cat-name">Email Services</div>
+      <ul class="service-list">
+        <li onclick="openModal('Email Services','Email Calls (Mix Domain / Gmail)')">Email Calls (Mix Domain / Gmail)</li>
+        <li onclick="openModal('Email Services','Email Marketing Tools')">Email Marketing Tools</li>
+        <li onclick="openModal('Email Services','Email Data Management')">Email Data Management</li>
+      </ul>
+      <button class="btn-order" onclick="openModal('Email Services')">Order Now</button>
+    </div>
+
+    <!-- SMS -->
+    <div class="cat-card sms">
+      <div class="cat-icon">💬</div>
+      <div class="cat-name">SMS Services</div>
+      <ul class="service-list">
+        <li onclick="openModal('SMS Services','iOS SMS Calls')">iOS SMS Calls</li>
+        <li onclick="openModal('SMS Services','PayPal Push Notifications')">PayPal Push Notifications</li>
+        <li onclick="openModal('SMS Services','SMS Data Services')">SMS Data Services</li>
+      </ul>
+      <button class="btn-order" onclick="openModal('SMS Services')">Order Now</button>
+    </div>
+
+    <!-- TECH -->
+    <div class="cat-card tech">
+      <div class="cat-icon">⚙️</div>
+      <div class="cat-name">Tech &amp; Access</div>
+      <ul class="service-list">
+        <li onclick="openModal('Tech & Access','RDP Services')">RDP Services</li>
+        <li onclick="openModal('Tech & Access','SMTP (API / Manual / App Password)')">SMTP (API / Manual / App Password)</li>
+        <li onclick="openModal('Tech & Access','All IP SMTP Configuration')">All IP SMTP Configuration</li>
+      </ul>
+      <button class="btn-order" onclick="openModal('Tech & Access')">Order Now</button>
+    </div>
+
+    <!-- FINANCE -->
+    <div class="cat-card finance">
+      <div class="cat-icon">💰</div>
+      <div class="cat-name">Financial Services</div>
+      <ul class="service-list">
+        <li onclick="openModal('Financial Services','Gift Card Blocking')">Gift Card Blocking</li>
+        <li onclick="openModal('Financial Services','Wire / Zelle / PayPal')">Wire / Zelle / PayPal</li>
+        <li onclick="openModal('Financial Services','Cash / Gold Pickup')">Cash / Gold Pickup</li>
+        <li onclick="openModal('Financial Services','Wire Accounts / TFN')">Wire Accounts / TFN</li>
+      </ul>
+      <button class="btn-order" onclick="openModal('Financial Services')">Order Now</button>
+    </div>
+
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="divider"></div>
+  <p class="sec-title">How to Order</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Choose Service</div>
+      <p>Browse available services and click the one you need to open the order form.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Fill Details</div>
+      <p>Enter your name and describe your exact requirements in the form.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Send via WhatsApp</div>
+      <p>Hit send — your order goes directly to WhatsApp. Wait for a reply.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">Prepay &amp; Receive</div>
+      <p>Complete prepayment to confirm the order. Delivery is fast and professional.</p>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <h2>Ready to Order?</h2>
+    <p>Professional &amp; serious inquiries only — prepaid orders.</p>
+    <a class="btn-wa" href="#" onclick="openModal('General Inquiry'); return false;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Contact via WhatsApp
+    </a>
+    <p class="note"><strong>★</strong> Prepaid Orders Only &nbsp;|&nbsp; Professional &amp; Serious Inquiries Only</p>
+  </div>
+
+  <footer>
+    &copy; 2025 <strong>Tech Support</strong> — One Stop Solution &nbsp;|&nbsp; All rights reserved
+  </footer>
+
+</div>
+
+<script>
+  // ── REPLACE WITH YOUR WHATSAPP NUMBER ──
+  const WHATSAPP_NUMBER = "1234567890"; // e.g. "14155552671" (no + or spaces)
+
+  function openModal(category, preselect) {
+    const modal = document.getElementById('modal');
+    document.getElementById('modal-title').textContent = 'Order: ' + category;
+    if (preselect) {
+      const sel = document.getElementById('field-service');
+      for (let i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === preselect) { sel.selectedIndex = i; break; }
+      }
+    }
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  function sendToWhatsApp() {
+    const name    = document.getElementById('field-name').value.trim();
+    const service = document.getElementById('field-service').value;
+    const details = document.getElementById('field-details').value.trim();
+
+    if (!name) { alert('Please enter your name.'); return; }
+
+    const msg =
+      `🔵 *New Service Order*\n\n` +
+      `👤 *Name:* ${name}\n` +
+      `🛠 *Service:* ${service}\n` +
+      `📋 *Details:* ${details || 'No additional details provided.'}\n\n` +
+      `_Sent via Tech Support Dashboard_`;
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+    closeModal();
+  }
+</script>
+</body>
+</html>
